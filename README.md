@@ -14,7 +14,6 @@ https://lc100068-cmd.github.io/care-salon-musubi/
 - `script.js` — 追従LINEボタンの表示制御とCTAクリック計測
 - `assets/LP_01.webp`〜`LP_04.webp` — LP画像（1122×1402）
 - `assets/LP_0X-750.webp` — スマホ向け軽量版（srcsetで自動切替）
-- `.github/workflows/pages.yml` — GitHub Pagesへの自動デプロイ
 - `.nojekyll` — Jekyll処理の無効化
 
 ## 実装のポイント
@@ -40,4 +39,10 @@ python3 -m http.server 8000
 
 ## デプロイ
 
-`main` ブランチへの更新時にGitHub Actions経由でGitHub Pagesへ自動デプロイされます。
+GitHub Pagesの「Deploy from a branch」で公開しています。
+
+- Settings → Pages → Build and deployment
+  - Source: `Deploy from a branch`
+  - Branch: `main` / `(root)`
+
+ビルド処理は不要なため、`main` へpushすると数分で反映されます。
