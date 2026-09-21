@@ -1,6 +1,15 @@
+/* =========================================================
+   Care salon 結 -musubi- LP
+   モバイルファースト。LP_01〜LP_04を隙間なく縦に並べる。
+   ========================================================= */
+
 :root {
+  --lp-max-width: 1122px;
+  --bg-page: #ebe6de;
+  --bg-sheet: #f3efe8;
+  --line-green: #06c755;
+  --line-green-dark: #05a544;
   color-scheme: light;
-  background: #ebe6de;
 }
 
 *,
@@ -11,23 +20,28 @@
 
 html {
   margin: 0;
-  background: #ebe6de;
+  background: var(--bg-page);
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   min-width: 320px;
   margin: 0;
-  background: #ebe6de;
+  background: var(--bg-page);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP",
+    "Yu Gothic", "Meiryo", system-ui, sans-serif;
 }
+
+/* ---------- LP 本体：画像を隙間0で縦積み ---------- */
 
 .lp {
   width: 100%;
-  max-width: 1122px;
+  max-width: var(--lp-max-width);
   margin: 0 auto;
-  overflow: hidden;
-  background: #f3efe8;
-  box-shadow: 0 0 32px rgb(66 55 44 / 10%);
+  background: var(--bg-sheet);
+  /* line-height: 0 と display:block で画像間の余白を完全に無くす */
+  font-size: 0;
+  line-height: 0;
 }
 
 .lp-panel {
@@ -46,7 +60,10 @@ body {
   margin: 0;
   padding: 0;
   border: 0;
+  vertical-align: top;
 }
+
+/* ---------- 画像内のLINEボタンに重ねるリンク領域 ---------- */
 
 .line-hotspot {
   position: absolute;
@@ -58,24 +75,100 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* 座標は画像内のボタン位置から算出（％指定なので拡大縮小に追従） */
 .line-hotspot--hero {
-  top: 70.1%;
-  left: 4.1%;
-  width: 67.5%;
-  height: 8.3%;
+  top: 69.9%;
+  left: 4.2%;
+  width: 67%;
+  height: 8%;
 }
 
 .line-hotspot--final {
   top: 83.4%;
-  left: 12.5%;
-  width: 75%;
+  left: 12.4%;
+  width: 75.2%;
   height: 8.5%;
 }
 
 .line-hotspot:focus-visible {
   outline: 4px solid #fff;
   outline-offset: -6px;
-  box-shadow: 0 0 0 6px #167649;
+  box-shadow: 0 0 0 5px var(--line-green-dark);
+}
+
+@media (hover: hover) {
+  .line-hotspot:hover {
+    box-shadow: inset 0 0 0 3px rgb(255 255 255 / 65%);
+  }
+}
+
+/* ---------- 追従LINEボタン（スクロール後に表示） ---------- */
+
+.floating-cta {
+  position: fixed;
+  right: 0;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: min(92%, 420px);
+  margin: 0 auto;
+  padding: 14px 20px;
+  border-radius: 999px;
+  background: var(--line-green);
+  box-shadow: 0 8px 20px rgb(6 199 85 / 32%), 0 2px 6px rgb(66 55 44 / 18%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.floating-cta[hidden] {
+  display: none;
+}
+
+.floating-cta__icon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  color: #fff;
+}
+
+.floating-cta:active {
+  transform: translateY(1px);
+}
+
+.floating-cta:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+/* JS無効時は追従ボタンを出さない（hidden属性のまま） */
+
+/* ---------- 補助 ---------- */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 20;
+  padding: 10px 16px;
+  background: var(--line-green);
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
 }
 
 .visually-hidden {
@@ -90,20 +183,29 @@ body {
   border: 0;
 }
 
-@media (hover: hover) {
-  .line-hotspot:hover {
-    box-shadow: inset 0 0 0 3px rgb(255 255 255 / 65%);
-  }
-}
+/* ---------- 画面幅による調整 ---------- */
 
+/* 画像の実寸（1122px）より狭い＝スマホ／タブレット */
 @media (max-width: 1122px) {
   html,
   body {
-    background: #f3efe8;
+    background: var(--bg-sheet);
+  }
+}
+
+/* PCでは中央のシートを少し浮かせる */
+@media (min-width: 1123px) {
+  .lp {
+    box-shadow: 0 0 32px rgb(66 55 44 / 10%);
   }
 
-  .lp {
-    box-shadow: none;
+  .floating-cta {
+    right: 24px;
+    left: auto;
+    bottom: 24px;
+    width: auto;
+    margin: 0;
+    font-size: 17px;
   }
 }
 
@@ -111,6 +213,7 @@ body {
   *,
   *::before,
   *::after {
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
